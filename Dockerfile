@@ -1,14 +1,14 @@
 FROM golang:1.13.1 as builder
 WORKDIR /
-RUN go get -d -v github.com/gorilla/mux \
-	&& go get -d -v gopkg.in/mgo.v2/bson \
-	&& go get -d -v gopkg.in/mgo.v2
+RUN go get -d -v github.com/nikhilmalhotra123/apps \
+&& go get -d -v go.mongodb.org/mongo-driver/mongo \
+&& go get -d -v go.mongodb.org/mongo-driver/mongo/options
 COPY main.go .
-RUN go build -o app .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
-FROM alpine:latest as build
+FROM alpine:latest
+RUN apk --no-cache add curl
+EXPOSE 8080
 WORKDIR /
-COPY . .
-RUN go build -o /out/example .
-FROM scratch AS bin
-COPY --from=build /out/example /
+COPY --from=builder / .
+CMD ["./app"]

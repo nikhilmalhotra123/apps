@@ -7,5 +7,5 @@ stopdb:
 run:
 	go run main.go
 
-docker build:
+docker-build:
 	docker build -t jobapps:latest .

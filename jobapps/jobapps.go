@@ -170,6 +170,7 @@ func UpdateApplicationHandler(w http.ResponseWriter, r *http.Request)  {
 		appOwner, err := jobapps.GetApplicationByID(app.ID)
 		if err != nil {
 			res.Error = "Can not find application"
+			json.NewEncoder(w).Encode(res)
 			return
 		}
 
@@ -225,6 +226,7 @@ func DeleteApplicationHandler(w http.ResponseWriter, r *http.Request)  {
 		appOwner, err := jobapps.GetApplicationByID(vars["id"])
 		if err != nil {
 			res.Error = "Can not find application"
+			json.NewEncoder(w).Encode(res)
 			return
 		}
 
