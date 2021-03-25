@@ -8,4 +8,4 @@ run:
 	go run main.go
 
 docker build:
-	docker build --no-cache -t gologin:latest .
+	docker build -t jobapps:latest .
