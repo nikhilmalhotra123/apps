@@ -1,16 +1,23 @@
-version: '3'
+version: '3.7'
 services:
-  mongodb:
-    image: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - "mongodata:/data/db"
-    networks:
-      - network1
-
-volumes:
-   mongodata:
-
-networks:
-   network1:
+    # The Go App
+    jobapps:
+        build: ./
+        container_name: jobapps
+        depends_on:
+            - 'mongo'
+        environment:
+            - PORT=8080
+        ports:
+            - '8080:8080'
+        volumes:
+            - './:/opt/go-app:cached'
+    # MongoDB
+    mongo:
+        image: 'mongo'
+        container_name: mongo
+        ports:
+            - '27017:27017'
+        volumes:
+            - ./mongodata:/data/db
+        restart: always

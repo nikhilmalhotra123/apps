@@ -1,14 +1,24 @@
-FROM golang:1.13.1 as builder
-WORKDIR /
-RUN go get -d -v github.com/nikhilmalhotra123/apps \
-&& go get -d -v go.mongodb.org/mongo-driver/mongo \
-&& go get -d -v go.mongodb.org/mongo-driver/mongo/options
-COPY main.go .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+# Pull base image
+FROM golang:alpine
 
-FROM alpine:latest
-RUN apk --no-cache add curl
-EXPOSE 8080
-WORKDIR /
-COPY --from=builder / .
-CMD ["./app"]
+# Install git
+RUN apk update && apk add --no-cache git
+
+# Where our file will be in the docker container
+WORKDIR /opt/go-app
+
+# Copy the source from the current directory to the working
+# Directory inside the container
+# Source also contains go.mod and go.sum which are dependency files
+COPY . .
+
+# Get Dependency
+RUN go mod download
+
+# Install Air for hot reload
+RUN go get -u github.com/cosmtrek/air
+
+# The ENTRYPOINT defines the command that will be ran when the
+# container starts up
+# In this case air command for hot reload go apps on file changes
+ENTRYPOINT air

@@ -17,7 +17,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request)  {
   w.Header().Set("Content-Type", "application/json")
 
   var user model.User
-  var res model.Response
+	var res model.Response
   body, _ := ioutil.ReadAll(r.Body)
 
   if err := json.Unmarshal(body, &user); err != nil {
