@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -23,5 +24,10 @@ func main() {
 	router.HandleFunc("/user/app/{id}",
 	jobapps.DeleteApplicationHandler).Methods("DELETE")
 
-  log.Fatal(http.ListenAndServe(":8080", router))
+	c := cors.New(cors.Options{
+        AllowedOrigins: []string{"http://localhost:3000"},
+        AllowCredentials: true,
+  })
+	handler := c.Handler(router)
+  log.Fatal(http.ListenAndServe(":8080", handler))
 }

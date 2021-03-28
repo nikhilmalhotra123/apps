@@ -18,6 +18,8 @@ RUN go mod download
 # Install Air for hot reload
 RUN go get -u github.com/cosmtrek/air
 
+RUN go get -u github.com/rs/cors
+
 # The ENTRYPOINT defines the command that will be ran when the
 # container starts up
 # In this case air command for hot reload go apps on file changes
